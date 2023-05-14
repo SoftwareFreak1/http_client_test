@@ -1,0 +1,7 @@
+name: http_client_test
+description: Test HTTP clients using a snapshot of the request and response
+publish_to: 'none'
+version: 0.0.0
+
+environment:
+  sdk: ^3.0.0
