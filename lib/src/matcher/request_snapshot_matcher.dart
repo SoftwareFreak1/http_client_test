@@ -1,6 +1,6 @@
 import 'package:http_client_test/src/request_snapshot_comparator.dart';
+import 'package:http_client_test/src/matcher/async_matcher.dart';
 import 'package:test/test.dart';
-import 'package:matcher/src/expect/async_matcher.dart';
 
 class RequestSnapshotMatcher extends AsyncMatcher {
   final RequestSnapshotComparator _comparator;

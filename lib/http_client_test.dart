@@ -4,9 +4,9 @@ import 'package:http_client_test/src/captor/request_serializer_impl.dart';
 import 'package:http_client_test/src/request_snapshot_comparator_impl.dart';
 import 'package:http_client_test/src/loader/file_snapshot_loader.dart';
 import 'package:http_client_test/src/matcher/request_snapshot_matcher.dart';
-import 'package:matcher/src/expect/async_matcher.dart';
+import 'package:test/test.dart';
 
-AsyncMatcher matchesRequestSnapshot(final String snapshotPath) =>
+Matcher matchesRequestSnapshot(final String snapshotPath) =>
     RequestSnapshotMatcher(
       RequestSnapshotComparatorImpl(
         RequestCaptorImpl(MockHttpServerImpl(RequestSerializerImpl())),

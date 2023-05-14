@@ -30,7 +30,7 @@ void main() {
     }
 
     Future<bool> testMatcher({required final bool comparatorResult}) async {
-      final sendRequest = (_) async => {};
+      sendRequest(_) async => {};
 
       when(comparator.compare(sendRequest))
           .thenAnswer((_) async => comparatorResult);
