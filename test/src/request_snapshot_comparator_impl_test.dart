@@ -1,6 +1,6 @@
 import 'package:http_client_test/src/captor/request_captor.dart';
 import 'package:http_client_test/src/loader/snapshot_loader.dart';
-import 'package:http_client_test/src/request_snapshot_comparator.dart';
+import 'package:http_client_test/src/request_snapshot_comparator_impl.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
@@ -9,17 +9,17 @@ import 'request_snapshot_comparator_test.mocks.dart';
 
 @GenerateMocks([RequestCaptor, SnapshotLoader])
 void main() {
-  group('RequestSnapshotComparator', () {
+  group('RequestSnapshotComparatorImpl', () {
     late MockRequestCaptor requestCaptor;
     late MockSnapshotLoader snapshotLoader;
     late RequestSender sendRequest;
-    late RequestSnapshotComparator comparator;
+    late RequestSnapshotComparatorImpl comparator;
 
     setUp(() {
       requestCaptor = MockRequestCaptor();
       snapshotLoader = MockSnapshotLoader();
       sendRequest = (_) async {};
-      comparator = RequestSnapshotComparator(requestCaptor, snapshotLoader);
+      comparator = RequestSnapshotComparatorImpl(requestCaptor, snapshotLoader);
     });
 
     void mockCapture(final String? value) =>
