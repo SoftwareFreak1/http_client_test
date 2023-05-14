@@ -15,4 +15,8 @@ class FileSnapshotLoader implements SnapshotLoader {
       return null;
     }
   }
+
+  @override
+  Future<void> saveCapture(final String snapshot) =>
+      File('$_path.capture').writeAsString(snapshot);
 }
