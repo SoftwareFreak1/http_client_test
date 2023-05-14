@@ -8,7 +8,7 @@ class RequestSnapshotComparator {
   const RequestSnapshotComparator(this._captor, this._loader);
 
   Future<bool> compare(final RequestSender sendRequest) async {
-    final capturedSnapshot = await _captor.capture((_) async {});
+    final capturedSnapshot = await _captor.capture(sendRequest);
     final snapshot = await _loader.load();
 
     return capturedSnapshot == snapshot && capturedSnapshot != null;

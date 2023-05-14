@@ -12,27 +12,30 @@ void main() {
   group('RequestSnapshotComparator', () {
     late MockRequestCaptor requestCaptor;
     late MockSnapshotLoader snapshotLoader;
+    late RequestSender sendRequest;
     late RequestSnapshotComparator comparator;
 
     setUp(() {
       requestCaptor = MockRequestCaptor();
       snapshotLoader = MockSnapshotLoader();
+      sendRequest = (_) async {};
       comparator = RequestSnapshotComparator(requestCaptor, snapshotLoader);
     });
 
     void mockCapture(final String? value) =>
-        when(requestCaptor.capture(any)).thenAnswer((_) async => value);
+        when(requestCaptor.capture(sendRequest)).thenAnswer((_) async => value);
 
     void mockSnapshot(final String? value) =>
         when(snapshotLoader.load()).thenAnswer((_) async => value);
-    ;
+
+    Future<bool> compare() => comparator.compare(sendRequest);
 
     group('compare', () {
       test('should return true when capture and snapshot are equal', () async {
         mockCapture('RequestSnapshot');
         mockSnapshot('RequestSnapshot');
 
-        final result = await comparator.compare((_) async {});
+        final result = await compare();
         expect(result, isTrue);
       });
 
@@ -42,7 +45,7 @@ void main() {
           mockCapture('Capture');
           mockSnapshot('Snapshot');
 
-          final result = await comparator.compare((_) async {});
+          final result = await compare();
           expect(result, isFalse);
         },
       );
@@ -51,7 +54,7 @@ void main() {
         mockCapture(null);
         mockSnapshot(null);
 
-        final result = await comparator.compare((_) async {});
+        final result = await compare();
         expect(result, isFalse);
       });
     });
