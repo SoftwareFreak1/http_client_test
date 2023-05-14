@@ -5,7 +5,7 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-import 'request_snapshot_comparator_test.mocks.dart';
+import 'request_snapshot_comparator_impl_test.mocks.dart';
 
 @GenerateMocks([RequestCaptor, SnapshotLoader])
 void main() {
