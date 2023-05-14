@@ -1,0 +1,7 @@
+POST http://127.0.0.1:8080/request/path?key=value
+user-agent: Dart/3.0 (dart:io)
+transfer-encoding: chunked
+accept-encoding: gzip
+host: 127.0.0.1:8080
+
+RequestBody
