@@ -12,7 +12,12 @@ class RequestSnapshotComparatorImpl implements RequestSnapshotComparator {
   Future<bool> compare(final RequestSender sendRequest) async {
     final capturedSnapshot = await _captor.capture(sendRequest);
     final snapshot = await _loader.load();
+    final isEqual = capturedSnapshot == snapshot;
 
-    return capturedSnapshot == snapshot && capturedSnapshot != null;
+    if (!isEqual && capturedSnapshot != null) {
+      await _loader.saveCapture(capturedSnapshot);
+    }
+
+    return isEqual && capturedSnapshot != null;
   }
 }

@@ -56,6 +56,21 @@ void main() {
 
         expect(result, isTrue);
       });
+
+      test('should save capture when failed', () async {
+        final run =
+            (final String snapshotFilePath) => isFailed(() => expectLater(
+                  sendRequest(body: 'DifferentBody'),
+                  matchesRequestSnapshot(snapshotFilePath),
+                ));
+
+        const snapshotFileName = 'integration_test/matchesRequestSnapshot.http';
+        const captureFileName = '$snapshotFileName.capture';
+        await run(snapshotFileName);
+        final result = await run(captureFileName);
+
+        expect(result, isFalse);
+      });
     });
   });
 }

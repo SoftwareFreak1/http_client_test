@@ -57,6 +57,22 @@ void main() {
         final result = await compare();
         expect(result, isFalse);
       });
+
+      test('should save capture when not equal', () async {
+        mockCapture('Capture');
+        mockSnapshot('Snapshot');
+
+        await compare();
+        verify(snapshotLoader.saveCapture('Capture'));
+      });
+
+      test('should not save capture when equal', () async {
+        mockCapture('RequestSnapshot');
+        mockSnapshot('RequestSnapshot');
+
+        await compare();
+        verifyNever(snapshotLoader.saveCapture(any));
+      });
     });
   });
 }
