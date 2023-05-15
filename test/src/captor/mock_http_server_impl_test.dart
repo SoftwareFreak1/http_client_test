@@ -34,12 +34,7 @@ void main() {
         final result = await server.getCapturedRequest();
 
         expect(result?.method, equals('POST'));
-        expect(
-          result?.path,
-          equals(
-            'http://${endpoint.host}:${endpoint.port}/request/path?key=value',
-          ),
-        );
+        expect(result?.path, equals('/request/path?key=value'));
         expect(result?.headers['content-type'], equals('application/json'));
         expect(result?.headers['authorization'], equals('Bearer token'));
         expect(result?.body, equals('Multiline\nBody'));

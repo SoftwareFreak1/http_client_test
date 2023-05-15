@@ -13,7 +13,7 @@ class MockHttpServerImpl implements MockHttpServer {
       ..listen((request) async {
         _capturedRequest = RequestSnapshot(
           method: request.method,
-          path: request.requestedUri.toString(),
+          path: request.uri.toString(),
           headers: _mapHeaders(request.headers),
           body: await utf8.decodeStream(request),
         );
