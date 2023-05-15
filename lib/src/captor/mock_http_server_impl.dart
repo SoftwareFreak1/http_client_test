@@ -2,10 +2,14 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:http_client_test/src/captor/mock_http_server.dart';
 import 'package:http_client_test/src/snapshot/request_snapshot.dart';
+import 'package:http_client_test/src/snapshot/response_snapshot.dart';
 
 class MockHttpServerImpl implements MockHttpServer {
+  final ResponseSnapshot _response;
   HttpServer? _server;
   RequestSnapshot? _capturedRequest;
+
+  MockHttpServerImpl(this._response);
 
   @override
   Future<Uri> createEndpoint() async {
@@ -18,6 +22,9 @@ class MockHttpServerImpl implements MockHttpServer {
           body: await utf8.decodeStream(request),
         );
 
+        request.response.statusCode = _response.statusCode;
+        _response.headers.forEach(request.response.headers.add);
+        request.response.write(_response.body);
         await request.response.close();
       });
 
