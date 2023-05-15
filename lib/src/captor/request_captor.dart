@@ -1,5 +1,7 @@
+import 'package:http_client_test/src/snapshot/request_snapshot.dart';
+
 typedef RequestSender = Future<void> Function(Uri endpoint);
 
 abstract class RequestCaptor {
-  Future<String?> capture(RequestSender sendRequest);
+  Future<RequestSnapshot?> capture(RequestSender sendRequest);
 }

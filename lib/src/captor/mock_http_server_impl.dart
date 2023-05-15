@@ -1,19 +1,23 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:http_client_test/src/captor/mock_http_server.dart';
-import 'package:http_client_test/src/captor/request_serializer.dart';
+import 'package:http_client_test/src/snapshot/request_snapshot.dart';
 
 class MockHttpServerImpl implements MockHttpServer {
-  final RequestSerializer _requestSerializer;
   HttpServer? _server;
-  String? _capturedRequest;
-
-  MockHttpServerImpl(this._requestSerializer);
+  RequestSnapshot? _capturedRequest;
 
   @override
   Future<Uri> createEndpoint() async {
     final server = (await HttpServer.bind(InternetAddress.loopbackIPv4, 8080))
       ..listen((request) async {
-        _capturedRequest = await _requestSerializer.serialize(request);
+        _capturedRequest = RequestSnapshot(
+          method: request.method,
+          path: request.requestedUri.toString(),
+          headers: _mapHeaders(request.headers),
+          body: await utf8.decodeStream(request),
+        );
+
         await request.response.close();
       });
 
@@ -23,8 +27,16 @@ class MockHttpServerImpl implements MockHttpServer {
   }
 
   @override
-  Future<String?> getCapturedRequest() async {
+  Future<RequestSnapshot?> getCapturedRequest() async {
     await _server?.close();
     return _capturedRequest;
+  }
+
+  Map<String, String> _mapHeaders(final HttpHeaders headers) {
+    final result = <String, String>{};
+
+    headers.forEach((name, values) => result[name] = values[0]);
+
+    return result;
   }
 }
