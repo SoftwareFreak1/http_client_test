@@ -11,7 +11,7 @@ import 'package:http_client_test/http_client_test.dart';
 
 void main() {
   group('http_client_test', () {
-    Future<void> Function(Uri) sendRequest({
+    Future<String> Function(Uri) sendRequest({
       final String body = 'RequestBody',
     }) =>
         (endpoint) => HttpClient()
@@ -21,7 +21,8 @@ void main() {
               return request;
             })
             .then((request) => request..write(body))
-            .then((request) => request.close());
+            .then((request) => request.close())
+            .then((value) => 'RequestSenderResult');
 
     group('matchesRequestSnapshot', () {
       test('should succeed when request and snapshot are equal', () async {
@@ -79,6 +80,15 @@ void main() {
           equals('application/json'),
         );
         expect(responseBody, equals('ResponseBody'));
+      });
+
+      test('should return result of request sender', () async {
+        final result = await matchesRequestSnapshot(
+          send: sendRequest(),
+          request: 'integration_test/matchesRequestSnapshot.http',
+        );
+
+        expect(result, equals('RequestSenderResult'));
       });
     });
 

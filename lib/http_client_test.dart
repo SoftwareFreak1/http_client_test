@@ -9,8 +9,8 @@ import 'package:http_client_test/src/loader/file_snapshot_loader.dart';
 import 'package:http_client_test/src/request_snapshot_comparator_impl.dart';
 import 'package:http_client_test/src/snapshot/response_snapshot.dart';
 
-Future<void> matchesRequestSnapshot({
-  required final RequestSender send,
+Future<T> matchesRequestSnapshot<T>({
+  required final Future<T> Function(Uri) send,
   required final String request,
   final String? response,
 }) async {
@@ -23,9 +23,14 @@ Future<void> matchesRequestSnapshot({
     _newLoader(request),
   );
 
-  if (!await comparator.compare(send)) {
+  T? result;
+  sendRequest(final Uri endpoint) async => result = await send(endpoint);
+
+  if (!await comparator.compare(sendRequest)) {
     throw Exception('request snapshot isn\'t equal');
   }
+
+  return result as T;
 }
 
 Future<void> captureResponseSnapshot({
