@@ -24,72 +24,50 @@ void main() {
             .then((request) => request.close());
 
     group('matchesRequestSnapshot', () {
-      Future<bool> isFailed(Future<void> Function() function) async {
-        bool isFailed = false;
-
-        try {
-          await function();
-        } catch (e) {
-          isFailed = true;
-        }
-
-        return isFailed;
-      }
-
       test('should succeed when request and snapshot are equal', () async {
-        final result = await isFailed(() => expectLater(
-              sendRequest(),
-              matchesRequestSnapshot(
-                'integration_test/matchesRequestSnapshot.http',
-              ),
-            ));
-
-        expect(result, isFalse);
+        await matchesRequestSnapshot(
+          send: sendRequest(),
+          request: 'integration_test/matchesRequestSnapshot.http',
+        );
       });
 
       test('should fail when request and snapshot aren\'t equal', () async {
-        final result = await isFailed(() => expectLater(
-              sendRequest(body: 'DifferentBody'),
-              matchesRequestSnapshot(
-                'integration_test/matchesRequestSnapshot.http',
-              ),
-            ));
+        send() => matchesRequestSnapshot(
+              send: sendRequest(body: 'DifferentBody'),
+              request: 'integration_test/matchesRequestSnapshot.http',
+            );
 
-        expect(result, isTrue);
+        await expectLater(send, throwsA(anything));
       });
 
       test('should fail when snapshot file doesn\'t exist', () async {
-        final result = await isFailed(() => expectLater(
-              sendRequest(),
-              matchesRequestSnapshot('unknown_snapshot.http'),
-            ));
+        send() => matchesRequestSnapshot(
+              send: sendRequest(),
+              request: 'unknown_snapshot.http',
+            );
 
-        expect(result, isTrue);
+        await expectLater(send, throwsA(anything));
       });
 
       test('should save capture when failed', () async {
-        run(final String snapshotFilePath) => isFailed(() => expectLater(
-              sendRequest(body: 'DifferentBody'),
-              matchesRequestSnapshot(snapshotFilePath),
-            ));
+        send(final String snapshotFilePath) => matchesRequestSnapshot(
+              send: sendRequest(body: 'DifferentBody'),
+              request: snapshotFilePath,
+            );
 
         const snapshotFileName = 'integration_test/matchesRequestSnapshot.http';
         const captureFileName = '$snapshotFileName.capture';
-        await run(snapshotFileName);
-        final result = await run(captureFileName);
-
-        expect(result, isFalse);
+        await expectLater(() => send(snapshotFileName), throwsA(anything));
+        await send(captureFileName);
       });
 
       test('should send response', () async {
         final container = _ResponseContainer();
 
-        await expectLater(
-          container.sendRequest,
-          matchesRequestSnapshot(
-            'integration_test/matchesRequestSnapshot.request.http',
-            'integration_test/matchesRequestSnapshot.response.http',
-          ),
+        await matchesRequestSnapshot(
+          send: container.sendRequest,
+          request: 'integration_test/matchesRequestSnapshot.request.http',
+          response: 'integration_test/matchesRequestSnapshot.response.http',
         );
 
         final response = container.response!;

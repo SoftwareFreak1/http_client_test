@@ -5,28 +5,28 @@ import 'package:http_client_test/src/captor/snapshot_http_client_impl.dart';
 import 'package:http_client_test/src/loader/request_snapshot_serializer_impl.dart';
 import 'package:http_client_test/src/loader/response_snapshot_serializer_impl.dart';
 import 'package:http_client_test/src/loader/snapshot_loader.dart';
-import 'package:http_client_test/src/request_snapshot_comparator_impl.dart';
 import 'package:http_client_test/src/loader/file_snapshot_loader.dart';
-import 'package:http_client_test/src/matcher/request_snapshot_matcher.dart';
+import 'package:http_client_test/src/request_snapshot_comparator_impl.dart';
 import 'package:http_client_test/src/snapshot/response_snapshot.dart';
-import 'package:test/test.dart';
 
-Matcher matchesRequestSnapshot(
-  final String requestSnapshotFile, [
-  final String? responseSnapshotFile,
-]) =>
-    RequestSnapshotMatcher(
-      RequestSnapshotComparatorImpl(
-        _newRequestCaptor(
-          responseSnapshotFile == null
-              ? null
-              : () => _newLoader(responseSnapshotFile)
-                  .loadResponse()
-                  .then((response) => response!),
-        ),
-        _newLoader(requestSnapshotFile),
-      ),
-    );
+Future<void> matchesRequestSnapshot({
+  required final RequestSender send,
+  required final String request,
+  final String? response,
+}) async {
+  final comparator = RequestSnapshotComparatorImpl(
+    _newRequestCaptor(
+      response == null
+          ? null
+          : () => _newLoader(response).loadResponse().then((r) => r!),
+    ),
+    _newLoader(request),
+  );
+
+  if (!await comparator.compare(send)) {
+    throw Exception('request snapshot isn\'t equal');
+  }
+}
 
 Future<void> captureResponseSnapshot({
   required final String snapshotFile,
