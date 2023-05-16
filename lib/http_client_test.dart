@@ -32,7 +32,7 @@ Future<void> captureResponseSnapshot({
 final _requestCaptor = RequestCaptorImpl(
   MockHttpServerImpl(
     port: 8080,
-    response: ResponseSnapshot(
+    responseSupplier: () async => ResponseSnapshot(
       statusCode: 200,
       headers: {},
       body: '',

@@ -86,7 +86,7 @@ void main() {
           RequestCaptorImpl(
             MockHttpServerImpl(
               port: 8081,
-              response: ResponseSnapshot(
+              responseSupplier: () async => ResponseSnapshot(
                 statusCode: 200,
                 headers: {
                   'content-type': 'text/plain',

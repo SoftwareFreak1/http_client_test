@@ -12,7 +12,7 @@ void main() {
     setUp(() {
       server = MockHttpServerImpl(
         port: 8080,
-        response: ResponseSnapshot(
+        responseSupplier: () async => ResponseSnapshot(
           statusCode: 202,
           headers: {
             'content-type': 'application/json',

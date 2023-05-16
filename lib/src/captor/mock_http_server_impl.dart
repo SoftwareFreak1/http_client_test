@@ -4,17 +4,19 @@ import 'package:http_client_test/src/captor/mock_http_server.dart';
 import 'package:http_client_test/src/snapshot/request_snapshot.dart';
 import 'package:http_client_test/src/snapshot/response_snapshot.dart';
 
+typedef ResponseSupplier = Future<ResponseSnapshot> Function();
+
 class MockHttpServerImpl implements MockHttpServer {
   final int _port;
-  final ResponseSnapshot _response;
+  final ResponseSupplier _responseSupplier;
   HttpServer? _server;
   RequestSnapshot? _capturedRequest;
 
   MockHttpServerImpl({
     required final int port,
-    required final ResponseSnapshot response,
+    required final ResponseSupplier responseSupplier,
   })  : _port = port,
-        _response = response;
+        _responseSupplier = responseSupplier;
 
   @override
   Future<Uri> createEndpoint() async {
@@ -27,9 +29,10 @@ class MockHttpServerImpl implements MockHttpServer {
           body: await utf8.decodeStream(request),
         );
 
-        request.response.statusCode = _response.statusCode;
-        _response.headers.forEach(request.response.headers.add);
-        request.response.write(_response.body);
+        final response = await _responseSupplier();
+        request.response.statusCode = response.statusCode;
+        response.headers.forEach(request.response.headers.add);
+        request.response.write(response.body);
         await request.response.close();
       });
 
