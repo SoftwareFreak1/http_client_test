@@ -11,7 +11,8 @@ void main() {
 
     setUp(() {
       server = MockHttpServerImpl(
-        ResponseSnapshot(
+        port: 8080,
+        response: ResponseSnapshot(
           statusCode: 202,
           headers: {
             'content-type': 'application/json',
@@ -50,6 +51,13 @@ void main() {
           equals('custom-value'),
         );
         expect(responseBody, equals('Multiline\nResponseBody'));
+      });
+
+      test('should use configured port', () async {
+        final endpoint = await server.createEndpoint();
+        await server.getCapturedRequest();
+
+        expect(endpoint.port, equals(8080));
       });
     });
 

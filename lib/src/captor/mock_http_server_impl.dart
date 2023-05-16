@@ -5,15 +5,20 @@ import 'package:http_client_test/src/snapshot/request_snapshot.dart';
 import 'package:http_client_test/src/snapshot/response_snapshot.dart';
 
 class MockHttpServerImpl implements MockHttpServer {
+  final int _port;
   final ResponseSnapshot _response;
   HttpServer? _server;
   RequestSnapshot? _capturedRequest;
 
-  MockHttpServerImpl(this._response);
+  MockHttpServerImpl({
+    required final int port,
+    required final ResponseSnapshot response,
+  })  : _port = port,
+        _response = response;
 
   @override
   Future<Uri> createEndpoint() async {
-    final server = (await HttpServer.bind(InternetAddress.loopbackIPv4, 8080))
+    final server = (await HttpServer.bind(InternetAddress.loopbackIPv4, _port))
       ..listen((request) async {
         _capturedRequest = RequestSnapshot(
           method: request.method,

@@ -12,7 +12,8 @@ Matcher matchesRequestSnapshot(final String snapshotPath) =>
       RequestSnapshotComparatorImpl(
         RequestCaptorImpl(
           MockHttpServerImpl(
-            ResponseSnapshot(
+            port: 8080,
+            response: ResponseSnapshot(
               statusCode: 200,
               headers: {},
               body: '',
