@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:http_client_test/src/captor/mock_http_server_impl.dart';
@@ -79,6 +80,28 @@ void main() {
 
         expect(result, isFalse);
       });
+
+      test('should send response', () async {
+        final container = _ResponseContainer();
+
+        await expectLater(
+          container.sendRequest,
+          matchesRequestSnapshot(
+            'integration_test/matchesRequestSnapshot.request.http',
+            'integration_test/matchesRequestSnapshot.response.http',
+          ),
+        );
+
+        final response = container.response!;
+        final responseBody = await utf8.decodeStream(response);
+
+        expect(response.statusCode, equals(202));
+        expect(
+          response.headers.value('content-type'),
+          equals('application/json'),
+        );
+        expect(responseBody, equals('ResponseBody'));
+      });
     });
 
     group('captureResponseSnapshot', () {
@@ -130,4 +153,15 @@ void main() {
       });
     });
   });
+}
+
+class _ResponseContainer {
+  HttpClientResponse? _response;
+  HttpClientResponse? get response => _response;
+
+  Future<void> sendRequest(final Uri endpoint) async {
+    _response = await HttpClient()
+        .post(endpoint.host, endpoint.port, '/')
+        .then((request) => request.close());
+  }
 }
