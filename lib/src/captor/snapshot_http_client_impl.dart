@@ -17,12 +17,8 @@ class SnapshotHttpClientImpl implements SnapshotHttpClient {
     final Uri endpoint,
     final RequestSnapshot request,
   ) async {
-    final httpRequest = await HttpClient().open(
-      request.method,
-      endpoint.host,
-      endpoint.port,
-      request.path,
-    );
+    final httpRequest = await HttpClient()
+        .openUrl(request.method, endpoint.resolve(request.path));
 
     request.headers.forEach(httpRequest.headers.add);
     httpRequest.write(request.body);
