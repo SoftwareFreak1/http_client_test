@@ -53,6 +53,27 @@ void main() {
       });
     });
 
+    group('loadResponse', () {
+      test('should load response snapshot', () async {
+        final snapshot = ResponseSnapshot(statusCode: 0, headers: {}, body: '');
+        when(responseSerializer.parse('FileContent')).thenReturn(snapshot);
+
+        final result = await loader.loadResponse();
+        expect(result, same(snapshot));
+      });
+
+      test('should return null when file doesn\'t exist', () async {
+        final loader = FileSnapshotLoader(
+          requestSerializer: requestSerializer,
+          responseSerializer: responseSerializer,
+          path: 'unknown_file.http',
+        );
+
+        final result = await loader.loadResponse();
+        expect(result, isNull);
+      });
+    });
+
     group('saveCapture', () {
       test('should save snapshot in different file', () async {
         final snapshot = newSnapshot();

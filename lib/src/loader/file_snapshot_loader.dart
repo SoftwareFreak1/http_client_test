@@ -30,6 +30,16 @@ class FileSnapshotLoader implements SnapshotLoader {
   }
 
   @override
+  Future<ResponseSnapshot?> loadResponse() async {
+    try {
+      final content = await File(_path).readAsString();
+      return _responseSerializer.parse(content);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  @override
   Future<void> saveCapture(final RequestSnapshot snapshot) async {
     final content = _requestSerializer.serialize(snapshot);
     await File('$_path.capture').writeAsString(content);
