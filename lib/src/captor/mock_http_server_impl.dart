@@ -47,7 +47,10 @@ class MockHttpServerImpl implements MockHttpServer {
   Map<String, String> _mapHeaders(final HttpHeaders headers) {
     final result = <String, String>{};
 
-    headers.forEach((name, values) => result[name] = values[0]);
+    headers.forEach((name, values) {
+      if (name == HttpHeaders.hostHeader) return;
+      result[name] = values[0];
+    });
 
     return result;
   }

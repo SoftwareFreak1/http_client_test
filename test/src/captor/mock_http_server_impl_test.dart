@@ -79,6 +79,14 @@ void main() {
         expect(result?.body, equals('Multiline\nBody'));
       });
 
+      test('should not capture host header', () async {
+        final endpoint = await server.createEndpoint();
+        await sendRequest(endpoint);
+        final result = await server.getCapturedRequest();
+
+        expect(result?.headers.containsKey('host'), isFalse);
+      });
+
       test('should stop server', () async {
         final endpoint = await server.createEndpoint();
         await sendRequest(endpoint);
