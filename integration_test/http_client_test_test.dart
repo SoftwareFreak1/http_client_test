@@ -22,7 +22,7 @@ void main() {
             })
             .then((request) => request..write(body))
             .then((request) => request.close())
-            .then((value) => 'RequestSenderResult');
+            .then((_) => 'RequestSenderResult');
 
     group('matchesRequestSnapshot', () {
       test('should succeed when request and snapshot are equal', () async {
@@ -115,7 +115,8 @@ void main() {
         await mockServer(
           (endpoint) => captureResponseSnapshot(
             endpoint: endpoint,
-            send: sendRequest(),
+            // some request sender will fail when receiving the wrong response
+            send: (e) => sendRequest()(e).then((_) => throw Exception()),
             output: snapshotFile,
           ),
         );

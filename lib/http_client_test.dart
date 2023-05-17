@@ -38,7 +38,13 @@ Future<void> captureResponseSnapshot({
   required final RequestSender send,
   required final String output,
 }) async {
-  final request = await _newRequestCaptor().capture(send);
+  sendRequest(final Uri endpoint) async {
+    try {
+      await send(endpoint);
+    } catch (e) {} // ignore: empty_catches
+  }
+
+  final request = await _newRequestCaptor().capture(sendRequest);
   final response = await SnapshotHttpClientImpl().send(endpoint, request!);
   await _newLoader(output).saveResponseCapture(response);
 }
