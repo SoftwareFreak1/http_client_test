@@ -34,13 +34,13 @@ Future<T> matchesRequestSnapshot<T>({
 }
 
 Future<void> captureResponseSnapshot({
-  required final String snapshotFile,
   required final Uri endpoint,
-  required final RequestSender sendRequest,
+  required final RequestSender send,
+  required final String output,
 }) async {
-  final request = await _newRequestCaptor().capture(sendRequest);
+  final request = await _newRequestCaptor().capture(send);
   final response = await SnapshotHttpClientImpl().send(endpoint, request!);
-  await _newLoader(snapshotFile).saveResponseCapture(response);
+  await _newLoader(output).saveResponseCapture(response);
 }
 
 _newRequestCaptor([final ResponseSupplier? responseSupplier]) =>

@@ -114,9 +114,9 @@ void main() {
 
         await mockServer(
           (endpoint) => captureResponseSnapshot(
-            snapshotFile: snapshotFile,
             endpoint: endpoint,
-            sendRequest: sendRequest(),
+            send: sendRequest(),
+            output: snapshotFile,
           ),
         );
 
@@ -128,9 +128,9 @@ void main() {
       test('should send request to real endpoint', () async {
         final request = await mockServer(
           (endpoint) => captureResponseSnapshot(
-            snapshotFile: 'unknown_snapshot.http',
             endpoint: endpoint,
-            sendRequest: sendRequest(),
+            send: sendRequest(),
+            output: 'unknown_snapshot.http',
           ),
         );
 
