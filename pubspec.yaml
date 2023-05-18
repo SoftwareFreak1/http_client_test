@@ -1,6 +1,6 @@
 name: http_client_test
 description: Test HTTP clients using a snapshot of the request and response
-version: 0.0.0
+version: 0.1.0
 homepage: https://github.com/SoftwareFreak1/http_client_test
 repository: https://github.com/SoftwareFreak1/http_client_test
 
