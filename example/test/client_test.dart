@@ -1,6 +1,7 @@
 import 'package:test/test.dart';
 import 'package:http_client_test/http_client_test.dart';
 
+// ignore: avoid_relative_lib_imports
 import '../lib/client.dart';
 
 void main() {
