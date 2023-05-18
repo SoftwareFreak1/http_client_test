@@ -31,6 +31,8 @@ jobs:
       - uses: dart-lang/setup-dart@v1
         with:
           sdk: 3.0.0
+      - run: dart pub get
+      - run: dart run build_runner build --delete-conflicting-outputs
       - run: dart pub global activate pana
       - run: dart pub global run pana --no-warning --exit-code-threshold 0
       - run: dart pub publish --dry-run
