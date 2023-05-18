@@ -1,0 +1,4 @@
+GET /api/v1/users/12
+user-agent: Dart/3.0 (dart:io)
+accept-encoding: gzip
+
