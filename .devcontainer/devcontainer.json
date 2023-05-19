@@ -1,0 +1,10 @@
+{
+	"image": "dart:3.0.0",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"dart-code.dart-code"
+			]
+		}
+	}
+}
