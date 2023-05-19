@@ -3,7 +3,8 @@
 	"customizations": {
 		"vscode": {
 			"extensions": [
-				"dart-code.dart-code"
+				"dart-code.dart-code",
+				"streetsidesoftware.code-spell-checker"
 			]
 		}
 	}
